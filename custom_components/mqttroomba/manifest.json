@@ -1,0 +1,14 @@
+{
+  "domain": "mqttroomba",
+  "name": "MQTT for Roomba",
+  "documentation": "https://github.com/Elwinmage/ha-mqtt-roomba-component",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/Elwinmage/ha-mqtt-roomba-component/issues",
+  "version": "2024.048.06",
+  "codeowners": [
+    "@Elwinmage"
+  ],
+  "mqtt": [
+    "roomba/#"
+  ]
+}
