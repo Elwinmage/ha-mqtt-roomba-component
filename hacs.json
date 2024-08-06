@@ -1,0 +1,8 @@
+{
+    "name": "MQTTRoomba",
+    "domains": [
+        "sensor",
+        "switch"
+    ],
+    "render_readme": true
+}
