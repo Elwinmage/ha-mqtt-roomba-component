@@ -8,8 +8,5 @@
   "codeowners": [
     "@Elwinmage"
   ],
-    "config_flow": true,
-//    "mqtt": [
-//    "roomba/#"
-//  ]
+  "config_flow": true
 }
