@@ -1,0 +1,18 @@
+{
+    "title": "MQTTRoomba",
+    "config": {
+        "flow_title": "MQTTRoomba configuration",
+        "step": {
+            "user": {
+                "title": "Vos infos de connexion",
+                "description": "Donnez vos infos de connexion",
+                "data": {
+                    "hostname": "MQTT Hostname",
+		    "port": "MQTT Port",
+		    "username": "MQTT username",
+		    "password": "MQTT Password"
+                }
+            }
+        }
+    }
+}
