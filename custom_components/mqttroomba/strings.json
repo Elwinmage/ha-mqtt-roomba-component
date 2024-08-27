@@ -1,18 +1,22 @@
 {
-    "title": "MQTTRoomba",
-    "config": {
-        "flow_title": "MQTTRoomba configuration",
-        "step": {
-            "user": {
-                "title": "Vos infos de connexion",
-                "description": "Donnez vos infos de connexion",
-                "data": {
-                    "hostname": "MQTT Hostname",
-		    "port": "MQTT Port",
-		    "username": "MQTT username",
-		    "password": "MQTT Password"
-                }
-            }
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+	    "hostname": "[%key:common::config_flow::data::hostname%]",
+	    "port": "[%key:common::config_flow::data::port%]",    
+            "username": "[%key:common::config_flow::data::username%]",
+            "password": "[%key:common::config_flow::data::password%]"
         }
+      }
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
+    },
+    "abort": {
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
     }
+  }
 }

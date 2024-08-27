@@ -1,15 +1,15 @@
 {
   "domain": "mqttroomba",
-  "name": "MQTT for Roomba",
+  "name": "My MQTT Roomba integration",
+  "codeowners": ["@Elwinmage"],
+  "config_flow": true,
+  "dependencies": [],
   "documentation": "https://github.com/Elwinmage/ha-mqtt-roomba-component",
+  "homekit": {},
+  "integration_type": "hub",
   "iot_class": "local_polling",
-  "issue_tracker": "https://github.com/Elwinmage/ha-mqtt-roomba-component/issues",
-  "version": "2024.08.12",
-  "requirements": [
-      "paho-mqtt"
-    ],
-  "codeowners": [
-    "@Elwinmage"
-  ],
-  "config_flow": true
+  "requirements": ["paho-mqtt"],
+  "ssdp": [],
+  "zeroconf": [],
+  "version": "0.0.1"
 }
