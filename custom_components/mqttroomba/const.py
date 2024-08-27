@@ -3,6 +3,7 @@
 NAME = "MQTT for Roomba"
 DOMAIN = "mqttroomba"
 DOMAIN_DATA = f"{DOMAIN}_data"
+DEVICE_MANUFACTURER = "iRobot"
 VERSION = "2024.08.12"
 ISSUE_URL = "https://github.com/Elwinmage/ha-mqtt-roomba-component/issues"
 
@@ -10,6 +11,12 @@ PLATFORMS = ["sensor"]
 
 # Defaults
 DEFAULT_NAME = DOMAIN
+
+# CONF
+CONF_MQTT_HOSTNAME="hostname"
+CONF_MQTT_PORT="port"
+CONF_MQTT_USERNAME="username"
+CONF_MQTT_PASSWORD="password"
 
 STARTUP_MESSAGE = f"""
 -------------------------------------------------------------------

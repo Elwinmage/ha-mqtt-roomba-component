@@ -4,7 +4,10 @@
   "documentation": "https://github.com/Elwinmage/ha-mqtt-roomba-component",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/Elwinmage/ha-mqtt-roomba-component/issues",
-  "version": "2024.08.012",
+  "version": "2024.08.12",
+  "requirements": [
+      "paho-mqtt"
+    ],
   "codeowners": [
     "@Elwinmage"
   ],
