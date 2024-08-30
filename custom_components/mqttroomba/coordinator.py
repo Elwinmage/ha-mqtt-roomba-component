@@ -6,6 +6,7 @@ from typing import Any
 
 import logging
 import json
+import asyncio
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -33,9 +34,11 @@ class MQTTRoombaDataUpdateCoordinator(threading.Thread):
         """Initialize the Roomba hub."""
         self._run = False
         self.entry = entry
+        self._hass = hass
         self.mqttc = mqtt.Client("MQTTRommba")
         self.unique_id = "MQTTROOMBAUID"
-
+        self._entities = {}
+        self._initialized = False
         threading.Thread.__init__(self, name=self.unique_id)
 
     def run(self) -> None:
@@ -44,10 +47,12 @@ class MQTTRoombaDataUpdateCoordinator(threading.Thread):
         username = self.entry.data[CONF_MQTT_USERNAME]
         password = self.entry.data[CONF_MQTT_PASSWORD]
 
-        self.mqttc.on_connect = on_connect
-        self.mqttc.on_message = on_message
+        
+        self.mqttc.on_connect = self.on_connect
+        self.mqttc.on_message = self.on_message
         self.mqttc.username_pw_set(username, password)
 
+        #self.entity_state = MQTTRoombaSensorEntity()
         _LOGGER.error("Let's go!")
         try:
             self.mqttc.connect(hostname,port, 60)
@@ -56,24 +61,40 @@ class MQTTRoombaDataUpdateCoordinator(threading.Thread):
         LOGGER.debug("Logged in")
         self.mqttc.loop_forever()
 
-# The callback for when the client receives a CONNACK response from the server.
-def on_connect(client, userdata, flags, reason_code): #, properties):
-    # Subscribing in on_connect() means that if we lose the connection and
-    # reconnect then subscriptions will be renewed.
-    client.subscribe("/roomba/#")
+    def register_entity(self,entity):
+        self._entities[entity.name] = entity
+        _LOGGER.error("adding entity: %s"%entity.name)
 
-# The callback for when a PUBLISH message is received from the server.
-def on_message(client, userdata, msg):
-    if msg.topic == "/roomba/rooms":
-        rooms=json.loads(msg.payload)
-        for room in rooms:
-            _LOGGER.error("Roomba Room: "+str(room))
-            room_id = room["id"]
-            room_name= room["name"]
-    elif msg.topic == "/roomba/feedback/state":
+    def initialized(self):
+        self._initialized = True
         
-        _LOGGER.info("Roomba State: "+str(msg.payload))
-    else:
-        _LOGGER.error("Topic "+msg.topic+" not implemented")
+    # The callback for when the client receives a CONNACK response from the server.
+    def on_connect(self, client, userdata, flags, reason_code): #, properties):
+        # Subscribing in on_connect() means that if we lose the connection and
+        # reconnect then subscriptions will be renewed.
+        client.subscribe("/roomba/#")
+
+    # The callback for when a PUBLISH message is received from the server.
+    def on_message(self, client, userdata, msg):
+        if msg.topic == "/roomba/rooms":
+            rooms=json.loads(msg.payload)
+            for room in rooms:
+                _LOGGER.error("Roomba Room: "+str(room))
+                room_id = room["id"]
+                room_name= room["name"]
+        elif msg.topic == "/roomba/feedback/state" and self._initialized:
+            _LOGGER.error("search  entity: %s",msg.topic[1:].replace("/","_"))
+            try:
+                entity = self._entities[msg.topic[1:].replace("/","_")]
+                asyncio.run_coroutine_threadsafe(entity.async_push_update(msg.payload), self._hass.loop)
+            except:
+                _LOGGER.error("Uninitialized Coordinator!")
+                _LOGGER.error(self._entities)
+        else:
+            pass
+        #_LOGGER.warning("Topic "+msg.topic+" not implemented")
+        #name  = '_'.join(msg.topic.split('/')[2:])
+
+
 
         
